@@ -6,23 +6,32 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.List;
 import java.util.Random;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Plansza extends JPanel implements ActionListener, MouseListener {
-
-   private JButton nowaGra = new JButton("Nowa Gra");
-   private JButton pvp = new JButton("Gracz vs Gracz");
-   private JButton pvc = new JButton("Gracz vs komputer");
-   private JButton cvc = new JButton("Komp. vs komp?");
-   private String wiadomosc; 
+   
+	private List lista = new List();
+	private JButton nowaGra = new JButton("Nowa Gra");
+	private JButton pvp = new JButton("Gracz vs Gracz");
+	private JButton pvc = new JButton("Gracz vs komputer");
+    private JButton dodaj = new JButton("Dodaj");
+    private JButton usun = new JButton("Usun");
+    private JButton historia = new JButton("Historia");
+    private TextArea poleTekstowe = new TextArea();
+    
+    private String wiadomosc; 
    private Ruch inf; 
    private boolean czyWTrakcie;
    private int obecnyGracz;
@@ -30,8 +39,8 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
    private DaneORuchu[] dostepneRuchy; 
    private boolean czyPvP = false;
    private boolean czyPvC = false;
-   private boolean czyCVC = false;
-   
+   private Vector<Gracz> gracze = new Vector<Gracz>();
+   private int ktoryGracz;
    
    public Plansza() {
       addMouseListener(this);
@@ -39,7 +48,7 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
       stworzNowaGre();
    }
    
-   void stworzNowaGre() {
+  public void stworzNowaGre() {
       if (czyWTrakcie == true) {
 
          wiadomosc="Najpierw dokoncz biezaca rozgrywke!";
@@ -59,7 +68,6 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
       wiadomosc= str;
       nowaGra.setEnabled(true);
       czyWTrakcie = false;
-      czyCVC = false;
       czyPvC = false;
       czyPvP = false;
    }
@@ -118,31 +126,32 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 	        		 wykonajRuch(dostepneRuchy[i]);
 	            return;
 	         }
-		   /*Random rand = new Random();
-		   wykonajRuch(dostepneRuchy[rand.nextInt(dostepneRuchy.length)]);*/
 	   }else{
-		   try {
-			Thread.sleep(5);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		   Random rand = new Random();
-		   wykonajRuch(dostepneRuchy[rand.nextInt(dostepneRuchy.length)]);
+		   int max = 0;
+		   int maxi = 0;
+		   for(int i = 0;i<dostepneRuchy.length;i++){
+			   if(oplacalnosc(dostepneRuchy[i].doKtoregoWiersza , dostepneRuchy[i].doKtorejKolumny)>=max){
+				   max = oplacalnosc(dostepneRuchy[i].doKtoregoWiersza , dostepneRuchy[i].doKtorejKolumny);
+				   maxi = i;
+			   }
+		   }
+
+		   wykonajRuch(dostepneRuchy[maxi]);
 	   }
 
 	      wiadomosc="Wybierz pole, na ktorym chesz umiescic pionek.";
 
+   }
+   private int oplacalnosc(int w, int k){
+	   int wynik = 0;
+	   if(w-1>=0 && w+1<=7 && k-1>=0 && k+1<=7){
+		   if(inf.ktoryPionek(w+1, k-1)!=Ruch.NIEBIESKIE && inf.ktoryPionek(w+1, k-1)!=Ruch.NIEBIESKIE_KROLOWA &&
+				   inf.ktoryPionek(w+1, k+1)!=Ruch.NIEBIESKIE && inf.ktoryPionek(w+1, k+1)!=Ruch.NIEBIESKIE_KROLOWA){
+			   wynik +=1;
+		   }
 	   }
-   void kompVsKomp() {
-	   if(obecnyGracz==Ruch.NIEBIESKIE){
-		   Random rand = new Random();
-		   wykonajRuch(dostepneRuchy[rand.nextInt(dostepneRuchy.length)]);
-	   }else{
-		   Random rand = new Random();
-		   wykonajRuch(dostepneRuchy[rand.nextInt(dostepneRuchy.length)]);
-	   }
-
-	   }
+	   return wynik;
+   }
    void wykonajRuch(DaneORuchu ruch) {
 
       inf.wykonajRuch(ruch);
@@ -164,8 +173,11 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
       if (obecnyGracz == Ruch.NIEBIESKIE) {
          obecnyGracz = Ruch.BIALE;
          dostepneRuchy = inf.mozliweRuchy(obecnyGracz);
-         if (dostepneRuchy == null)
+         if (dostepneRuchy == null){
             koniecGry("Bialy nie ma juz ruchow, wygrywa niebieski.");
+            if(gracze.get(ktoryGracz)!=null)
+            	gracze.get(ktoryGracz).setIleWygranych();
+         }
          else if (dostepneRuchy[0].czySkok())
             wiadomosc="Bialy: Musisz zbic pionek przeciwnika.";
          else
@@ -173,8 +185,11 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
       }else {
          obecnyGracz = Ruch.NIEBIESKIE;
          dostepneRuchy = inf.mozliweRuchy(obecnyGracz);
-         if (dostepneRuchy == null)
+         if (dostepneRuchy == null){
             koniecGry("Niebieski nie ma juz ruchow, wygrywa bialy.");
+            if(gracze.get(ktoryGracz)!=null)
+            	gracze.get(ktoryGracz).setIlePrzegranych();
+         }
          else if (dostepneRuchy[0].czySkok())
             wiadomosc="Niebieski: Musisz zbic pionek przeciwnika.";
          else
@@ -250,9 +265,7 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
       if (czyWTrakcie == false)
          wiadomosc="Kliknij \"Nowa gra\" aby rozpoczac nowa gre.";
       else {
-    	  if(czyCVC){
-    		 kompVsKomp();
-    	  }else if(czyPvP){
+    	  if(czyPvP){
 	         int kolumna = (evt.getX() - 2) / 70;
 	         int wiersz = (evt.getY() - 2) / 70;
 	         if (kolumna >= 0 && kolumna < 8 && wiersz >= 0 && wiersz < 8)
@@ -275,11 +288,17 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
         okno.setResizable(false);
         okno.setLayout(null);
         pl.setBounds(0, 0, 600, 620);
-        okno.add(pl);
+        okno.add(pl); 
+        
+       	pl.lista.setBounds(760, 20, 140, 150);
+       	pl.dodaj.setBounds(910, 20, 90, 25);
+       	pl.usun.setBounds(910, 60, 90, 25);
         pl.nowaGra.setBounds(600, 60, 145, 30);
         pl.pvp.setBounds(600, 100, 145, 30);
         pl.pvc.setBounds(600, 140, 145, 30);
-        pl.cvc.setBounds(600, 180, 145, 30);
+        pl.historia.setBounds(700,200, 120,30);
+        pl.poleTekstowe.setBounds(600, 250, 400, 350);
+        pl.poleTekstowe.setVisible(false);
         pl.nowaGra.addActionListener(new ActionListener() {
 			
 			@Override
@@ -287,7 +306,9 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 			         pl.stworzNowaGre();
 			         pl.pvp.setEnabled(true);
 			         pl.pvc.setEnabled(true);
-			         pl.cvc.setEnabled(true);
+			         pl.lista.setEnabled(false);
+			         pl.dodaj.setEnabled(false);
+			         pl.usun.setEnabled(false);
 			}
 		});
         pl.pvp.addActionListener(new ActionListener() {
@@ -298,35 +319,70 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 			         pl.czyPvP = true;
 			         pl.pvp.setEnabled(false);
 			         pl.pvc.setEnabled(false);
-			         pl.cvc.setEnabled(false);
+			         pl.lista.setEnabled(false);
+			         pl.dodaj.setEnabled(false);
+			         pl.usun.setEnabled(false);
 			}
 		});
         pl.pvc.addActionListener(new ActionListener() {
 	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-		         pl.czyWTrakcie = true;
+		        if(pl.lista.getSelectedIndex()>-1){
+				pl.czyWTrakcie = true;
 		         pl.czyPvC = true;
 		         pl.pvp.setEnabled(false);
 		         pl.pvc.setEnabled(false);
-		         pl.cvc.setEnabled(false);
+		         pl.lista.setEnabled(false);
+		         pl.dodaj.setEnabled(false);
+		         pl.usun.setEnabled(false);
+		         pl.ktoryGracz = pl.lista.getSelectedIndex();
+		        }else{
+		        	JOptionPane.showMessageDialog(null, "Wybierz gracza");
+		        }
 			}
 		});
-        pl.cvc.addActionListener(new ActionListener() {
+        pl.dodaj.addActionListener(new ActionListener() {
         	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-		         pl.czyWTrakcie = true;
-		         pl.czyCVC = true;
-		         pl.pvp.setEnabled(false);
-		         pl.pvc.setEnabled(false);
-		         pl.cvc.setEnabled(false);
+				String nazwa = JOptionPane.showInputDialog("Dodaj nowego gracza.");
+				if(nazwa!=null){
+					Gracz nowyGracz  = new Gracz(nazwa);
+					pl.gracze.add(nowyGracz);
+					pl.lista.add(nazwa);
+				}
+			}
+		});
+        pl.usun.addActionListener(new ActionListener() {
+        	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(pl.lista.getSelectedIndex()>-1){
+					pl.gracze.remove(pl.lista.getSelectedIndex());
+		            pl.lista.remove(pl.lista.getSelectedIndex());
+				}
+			}
+		});
+        pl.historia.addActionListener(new ActionListener() {
+        	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				pl.poleTekstowe.setText("");
+				for(int i = 0; i<pl.gracze.size();i++){
+					pl.poleTekstowe.append("Gracz: "+pl.gracze.get(i).getNazwa()+" wygranych: " + pl.gracze.get(i).getIleWygranych() + " przegranych: " + pl.gracze.get(i).getIlePrzegranych()+"\n");
+				}
+				pl.poleTekstowe.setVisible(!pl.poleTekstowe.isVisible());
 			}
 		});
         okno.add(pl.nowaGra);
         okno.add(pl.pvp);
         okno.add(pl.pvc);
-        okno.add(pl.cvc);
+        okno.add(pl.lista);
+        okno.add(pl.dodaj);
+        okno.add(pl.usun);
+        okno.add(pl.historia);
+        okno.add(pl.poleTekstowe);
         while(true){
             pl.repaint();
         }
@@ -337,12 +393,9 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
    public void mouseClicked(MouseEvent evt) { }
    public void mouseEntered(MouseEvent evt) { }
    public void mouseExited(MouseEvent evt) { }
-   
+   public void actionPerformed(ActionEvent e) {}
    public static void main(String[] args) {
         start();
     }
 
-   @Override
-	public void actionPerformed(ActionEvent e) {
-	}
 }
