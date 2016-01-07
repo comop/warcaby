@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.List;
-import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -20,11 +19,14 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Plansza extends JPanel implements ActionListener, MouseListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public List lista = new List();
 	public JButton nowaGra = new JButton("Nowa Gra");
 	public JButton pvp = new JButton("Gracz vs Gracz");
@@ -68,6 +70,7 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 		wiadomosc = "Niebieski: Teraz Twoja kolej";
 		czyWTrakcie = false;
 		nowaGra.setEnabled(false);
+		repaint();
 	}
 
 	void koniecGry(String str) {
@@ -88,6 +91,7 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 					wiadomosc = "Niebieski: Wykonaj ruch";
 				else
 					wiadomosc = "Bialy: Wykonaj ruch.";
+				repaint();
 				return;
 			}
 
@@ -116,6 +120,7 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 						wiadomosc = "Niebieski: Wykonaj ruch";
 					else
 						wiadomosc = "Bialy: Wykonaj ruch.";
+					repaint();
 					return;
 				}
 
@@ -173,6 +178,7 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 					wiadomosc = "Bialy: musisz kontynuowac bicie";
 				wybranyWiersz = ruch.doKtoregoWiersza;
 				wybranaKolumna = ruch.doKtorejKolumny;
+				repaint();
 				return;
 			}
 		}
@@ -182,7 +188,8 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 			dostepneRuchy = inf.mozliweRuchy(obecnyGracz);
 			if (dostepneRuchy == null) {
 				koniecGry("Bialy nie ma juz ruchow, wygrywa niebieski.");
-				if (gracze.get(ktoryGracz) != null)
+				
+					if (!czyPvP && gracze.get(ktoryGracz) != null)
 					gracze.get(ktoryGracz).setIleWygranych();
 			} else if (dostepneRuchy[0].czySkok())
 				wiadomosc = "Bialy: Musisz zbic pionek przeciwnika.";
@@ -193,14 +200,15 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 			dostepneRuchy = inf.mozliweRuchy(obecnyGracz);
 			if (dostepneRuchy == null) {
 				koniecGry("Niebieski nie ma juz ruchow, wygrywa bialy.");
-				if (gracze.get(ktoryGracz) != null)
-					gracze.get(ktoryGracz).setIlePrzegranych();
+				
+					if (!czyPvP && gracze.get(ktoryGracz) != null)
+						gracze.get(ktoryGracz).setIlePrzegranych();
 			} else if (dostepneRuchy[0].czySkok())
 				wiadomosc = "Niebieski: Musisz zbic pionek przeciwnika.";
 			else
 				wiadomosc = "Niebieski: Wykonaj ruch.";
 		}
-
+		repaint();
 		wybranyWiersz = -1;
 
 	}
@@ -287,6 +295,7 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 	}
 
 	public static void start() {
+		
 		JFrame okno = new JFrame("WARCABY");
 		final Plansza pl = new Plansza();
 		Przyciski przy = new Przyciski(pl);
@@ -331,9 +340,7 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 		okno.add(pl.rezygnacja);
 		okno.add(pl.zasady);
 		okno.add(pl.menu);
-		while (true) 
-			pl.repaint();
-	}
+		}
 
 	public void mouseReleased(MouseEvent evt) {
 	}

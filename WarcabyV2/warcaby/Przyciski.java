@@ -48,6 +48,7 @@ public class Przyciski implements ActionListener {
 				pl.lista.setEnabled(false);
 				pl.dodaj.setEnabled(false);
 				pl.usun.setEnabled(false);
+				pl.repaint();
 			}
 		});
 		pl.pvc.addActionListener(new ActionListener() {
@@ -66,6 +67,7 @@ public class Przyciski implements ActionListener {
 				} else {
 					JOptionPane.showMessageDialog(null, "Wybierz gracza");
 				}
+				pl.repaint();
 			}
 		});
 		pl.dodaj.addActionListener(new ActionListener() {

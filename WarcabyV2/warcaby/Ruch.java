@@ -76,7 +76,7 @@ public class Ruch {
       else
          krolowa = BIALE_KROLOWA;
 
-      Vector ruchy = new Vector();
+      Vector<DaneORuchu> ruchy = new Vector<DaneORuchu>();
 
       for (int wiersz = 0; wiersz < 8; wiersz++) {
          for (int kolumna = 0; kolumna < 8; kolumna++) {
@@ -130,7 +130,7 @@ public class Ruch {
          krolowa = NIEBIESKIE_KROLOWA;
       else
          krolowa = BIALE_KROLOWA;
-      Vector ruchy = new Vector();
+      Vector<DaneORuchu> ruchy = new Vector<DaneORuchu>();
       if (plansza[wiersz][kolumna] == gracz || plansza[wiersz][kolumna] == krolowa) {
          if (czyMozliweBicie(gracz, wiersz, kolumna, wiersz+1, kolumna+1, wiersz+2, kolumna+2))
             ruchy.addElement(new DaneORuchu(wiersz, kolumna, wiersz+2, kolumna+2));
