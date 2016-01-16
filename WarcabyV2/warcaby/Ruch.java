@@ -1,26 +1,21 @@
-
 package warcaby;
 
 import java.util.Vector;
 
 public class Ruch {
-    
-
    public static final int
              PUSTE = 0,
              NIEBIESKIE = 1,
              NIEBIESKIE_KROLOWA = 2,
              BIALE = 3,
              BIALE_KROLOWA = 4;
-
    private int[][] plansza; 
-   
 
    public Ruch() {
       plansza = new int[8][8];
       przygotujPlansze();
    }
-   
+  
    public void przygotujPlansze() {
 
       for (int wiersz = 0; wiersz < 8; wiersz++) {
@@ -40,12 +35,10 @@ public class Ruch {
       }
    } 
    
-
    public int ktoryPionek(int wiersz, int kolumna) {
        return plansza[wiersz][kolumna];
    }
    
-
    public void wykonajRuch(DaneORuchu ruch) {
 	   int zWiersza = ruch.zKtoregoWiersza;
 	   int zKolumny = ruch.zKtorejKolumny;
@@ -64,9 +57,7 @@ public class Ruch {
          plansza[doWiersza][doKolumny] = BIALE_KROLOWA;
    }
    
-
    public DaneORuchu[] mozliweRuchy(int gracz) {
-
       if (gracz != NIEBIESKIE && gracz != BIALE)
          return null;
 
@@ -120,7 +111,6 @@ public class Ruch {
       }
 
    } 
-   
 
    public DaneORuchu[] mozliweBicia(int gracz, int wiersz, int kolumna) {
       if (gracz != NIEBIESKIE && gracz != BIALE)
@@ -151,14 +141,11 @@ public class Ruch {
       }
    }
    
-
    private boolean czyMozliweBicie(int gracz, int w1, int k1, int w2, int k2, int w3, int k3) {
       if (w3 < 0 || w3 >= 8 || k3 < 0 || k3 >= 8)
          return false;
-         
       if (plansza[w3][k3] != PUSTE)
-         return false;
-         
+         return false;    
       if (gracz == NIEBIESKIE) {
          if (plansza[w2][k1] == NIEBIESKIE && w3 > w2)
             return false;
@@ -173,17 +160,13 @@ public class Ruch {
             return false;
          return true;
       }
-
    } 
    
-
    private boolean czyMozliwyRuch(int gracz, int w1, int k1, int w2, int k2) {       
       if (w2 < 0 || w2 >= 8 || k2 < 0 || k2 >= 8)
          return false;
-         
       if (plansza[w2][k2] != PUSTE)
          return false;
-
       if (gracz == NIEBIESKIE) {
          if (plansza[w1][k1] == NIEBIESKIE && w2 > w1)
              return false;
@@ -194,7 +177,5 @@ public class Ruch {
              return false;
           return true;
       }
-      
    }
-
 }

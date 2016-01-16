@@ -1,4 +1,3 @@
-
 package warcaby;
 
 import java.awt.BasicStroke;
@@ -23,9 +22,6 @@ import javax.swing.JPanel;
 
 public class Plansza extends JPanel implements ActionListener, MouseListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public List lista = new List();
 	public JButton nowaGra = new JButton("Nowa Gra");
@@ -272,7 +268,7 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 		}
 		g2.setStroke(oldStroke);
 		g2.setColor(Color.red);
-		g2.drawString(wiadomosc, 300, 590);
+		g2.drawString(wiadomosc, 300, 580);
 	}
 
 	public void mousePressed(MouseEvent evt) {
@@ -314,7 +310,7 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 		pl.pvc.setBounds(600, 150, 145, 30);
 		pl.historia.setBounds(700, 210, 120, 30);
 		pl.poleTekstowe.setBounds(600, 260, 400, 312);
-		pl.zasady.setBounds(600, 590, 80, 20);
+		pl.zasady.setBounds(600, 580, 80, 20);
 		pl.poleTekstowe.setVisible(false);
 		pl.poleTekstowe.setEditable(false);
 		pl.nowaGra.addActionListener(przy);
@@ -342,23 +338,12 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 		okno.add(pl.menu);
 		}
 
-	public void mouseReleased(MouseEvent evt) {
-	}
-
-	public void mouseClicked(MouseEvent evt) {
-	}
-
-	public void mouseEntered(MouseEvent evt) {
-	}
-
-	public void mouseExited(MouseEvent evt) {
-	}
-
-	public void actionPerformed(ActionEvent e) {
-	}
-
+	public void mouseReleased(MouseEvent evt) {}
+	public void mouseClicked(MouseEvent evt) {}
+	public void mouseEntered(MouseEvent evt) {}
+	public void mouseExited(MouseEvent evt) {}
+	public void actionPerformed(ActionEvent e) {}
 	public static void main(String[] args) {
 		start();
 	}
-
 }

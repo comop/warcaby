@@ -14,17 +14,13 @@ public class Gracz {
 	public int getIleWygranych() {
 		return ileWygranych;
 	}
-
 	public void setIleWygranych() {
 		ileWygranych++;
 	}
-
 	public int getIlePrzegranych() {
 		return ilePrzegranych;
 	}
-
 	public void setIlePrzegranych() {
 		ilePrzegranych++;
-	}
-	
+	}	
 }

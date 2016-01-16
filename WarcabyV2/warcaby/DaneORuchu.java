@@ -1,4 +1,3 @@
-
 package warcaby;
 
 public class DaneORuchu {
