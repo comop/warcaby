@@ -2,131 +2,192 @@ package warcaby;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+import javax.swing.JFileChooser;
 
 import javax.swing.JOptionPane;
 
 public class Przyciski implements ActionListener {
-	private Plansza pl = new Plansza();
-	private String zasady = "Jako pierwszy ruch wykonuje graj¹cy pionami niebieskimi, po czym gracze wykonuj¹ na zmianê kolejne ruchy.\n"
-			+ "Celem gry jest zbicie wszystkich pionów przeciwnika albo zablokowanie wszystkich, które pozostaj¹ na planszy, pozbawiaj¹c przeciwnika mo¿liwoœci wykonania ruchu.\n"
-			+ "Piony mog¹ poruszaæ siê o jedno pole do przodu po przek¹tnej (na ukos) na wolne pola.\n"
-			+ "Bicie pionem nastêpuje przez przeskoczenie s¹siedniego pionu (lub damki) przeciwnika na pole znajduj¹ce siê tu¿ za nim po przek¹tnej (pole to musi byæ wolne). Zbite piony s¹ usuwane z planszy po zakoñczeniu ruchu.\n"
-			+ "Piony mog¹ biæ zarówno do przodu, jak i do ty³u.\n"
-			+ "W jednym ruchu wolno wykonaæ wiêcej ni¿ jedno bicie tym samym pionem, przeskakuj¹c przez kolejne piony (damki) przeciwnika.\n"
-			+ "Bicia s¹ obowi¹zkowe.\n"
-			+ "Pion, który dojdzie do ostatniego rzêdu planszy, staje siê damk¹, przy czym jeœli znajdzie siê tam w wyniku bicia i bêdzie móg³ wykonaæ kolejne bicie (do ty³u), to bêdzie musia³ je wykonaæ i nie staje siê wtedy damk¹.\n"
-			+ "Kiedy pion staje siê damk¹, kolej ruchu przypada dla przeciwnika.\n"
-			+ "Damki mog¹ poruszaæ siê w jednym ruchu o jedno pole do przodu lub do ty³u po przek¹tnej.\n"
-			+ "Kiedy istnieje kilka mo¿liwych biæ, gracz musi wykonaæ maksymalne (tzn. takie, w którym zbije najwiêksz¹ liczbê pionów lub damek przeciwnika).\n"
-			+ "Podczas bicia nie mo¿na przeskakiwaæ wiêcej ni¿ jeden raz przez ten sam pion (damkê).";
-	public Przyciski(Plansza pl) {
-		this.pl = pl;
-		akcje();
-	}
 
-	public void akcje() {
-		pl.nowaGra.addActionListener(new ActionListener() {
+    private Plansza pl = new Plansza();
+    private String zasady = "Jako pierwszy ruch wykonuje grajacy pionami niebieskimi, po czym gracze wykonuja na zmiane kolejne ruchy.\n"
+            + "Celem gry jest zbicie wszystkich pionow przeciwnika albo zablokowanie wszystkich, ktore pozostajo na planszy, pozbawiajac przeciwnika mozliwosci wykonania ruchu.\n"
+            + "Piony moga poruszac sie o jedno pole do przodu po przekatnej (na ukos) na wolne pola.\n"
+            + "Bicie pionem nastepuje przez przeskoczenie sasiedniego pionu (lub damki) przeciwnika na pole znajdujace sie tuz za nim po przekatnej (pole to musi byc wolne). Zbite piony sa usuwane z planszy po zakonczeniu ruchu.\n"
+            + "Piony moga bic zarowno do przodu, jak i do tylu.\n"
+            + "W jednym ruchu wolno wykonac wiecej niz jedno bicie tym samym pionem, przeskakujac przez kolejne piony (damki) przeciwnika.\n"
+            + "Bicia sa obowiï¿½zkowe.\n"
+            + "Pion, ktory dojdzie do ostatniego rzedu planszy, staje sie damka, przy czym jezli znajdzie sie tam w wyniku bicia i bedzie mogl wykonac kolejne bicie (do tylu), to bedzie musial je wykonac i nie staje sie wtedy damka.\n"
+            + "Kiedy pion staje sie damka, kolej ruchu przypada dla przeciwnika.\n"
+            + "Damki moga poruszac sie w jednym ruchu o jedno pole do przodu lub do tylu po przekatnej.\n"
+            + "Kiedy istnieje kilka mozliwych bic, gracz musi wykonac maksymalne (tzn. takie, w ktorym zbije najwieksza liczbe pionow lub damek przeciwnika).\n"
+            + "Podczas bicia nie mozna przeskakiwac wiecej niz jeden raz przez ten sam pion (damka).";
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				pl.stworzNowaGre();
-				pl.pvp.setEnabled(true);
-				pl.pvc.setEnabled(true);
-				pl.lista.setEnabled(true);
-				pl.dodaj.setEnabled(true);
-				pl.usun.setEnabled(true);
-			}
-		});
-		pl.pvp.addActionListener(new ActionListener() {
+    public Przyciski(Plansza pl) {
+        this.pl = pl;
+        akcje();
+    }
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				pl.czyWTrakcie = true;
-				pl.czyPvP = true;
-				pl.pvp.setEnabled(false);
-				pl.pvc.setEnabled(false);
-				pl.lista.setEnabled(false);
-				pl.dodaj.setEnabled(false);
-				pl.usun.setEnabled(false);
-				pl.repaint();
-			}
-		});
-		pl.pvc.addActionListener(new ActionListener() {
+    public void akcje() {
+        pl.nowaGra.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (pl.lista.getSelectedIndex() > -1) {
-					pl.czyWTrakcie = true;
-					pl.czyPvC = true;
-					pl.pvp.setEnabled(false);
-					pl.pvc.setEnabled(false);
-					pl.lista.setEnabled(false);
-					pl.dodaj.setEnabled(false);
-					pl.usun.setEnabled(false);
-					pl.ktoryGracz = pl.lista.getSelectedIndex();
-				} else {
-					JOptionPane.showMessageDialog(null, "Wybierz gracza");
-				}
-				pl.repaint();
-			}
-		});
-		pl.dodaj.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pl.stworzNowaGre();
+                pl.pvp.setEnabled(true);
+                pl.pvc.setEnabled(true);
+                pl.lista.setEnabled(true);
+                pl.dodaj.setEnabled(true);
+                pl.usun.setEnabled(true);
+            }
+        });
+        pl.pvp.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String nazwa = JOptionPane.showInputDialog("Dodaj nowego gracza.");
-				if (nazwa != null && nazwa.length() >0) {
-					Gracz nowyGracz = new Gracz(nazwa);
-					pl.gracze.add(nowyGracz);
-					pl.lista.add(nazwa);
-				}
-			}
-		});
-		pl.usun.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pl.czyWTrakcie = true;
+                pl.czyPvP = true;
+                pl.pvp.setEnabled(false);
+                pl.pvc.setEnabled(false);
+                pl.lista.setEnabled(false);
+                pl.dodaj.setEnabled(false);
+                pl.usun.setEnabled(false);
+                pl.repaint();
+            }
+        });
+        pl.pvc.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (pl.lista.getSelectedIndex() > -1) {
-					pl.gracze.remove(pl.lista.getSelectedIndex());
-					pl.lista.remove(pl.lista.getSelectedIndex());
-				}
-			}
-		});
-		pl.historia.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (pl.lista.getSelectedIndex() > -1) {
+                    pl.czyWTrakcie = true;
+                    pl.czyPvC = true;
+                    pl.pvp.setEnabled(false);
+                    pl.pvc.setEnabled(false);
+                    pl.lista.setEnabled(false);
+                    pl.dodaj.setEnabled(false);
+                    pl.usun.setEnabled(false);
+                    pl.ktoryGracz = pl.lista.getSelectedIndex();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Wybierz gracza");
+                }
+                pl.repaint();
+            }
+        });
+        pl.dodaj.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				pl.poleTekstowe.setText("");
-				for (int i = 0; i < pl.gracze.size(); i++) {
-					pl.poleTekstowe.append("Gracz: " + pl.gracze.get(i).getNazwa() + " wygranych: "
-							+ pl.gracze.get(i).getIleWygranych() + " przegranych: "
-							+ pl.gracze.get(i).getIlePrzegranych() + "\n");
-				}
-				pl.poleTekstowe.setVisible(!pl.poleTekstowe.isVisible());
-			}
-		});
-		pl.rezygnacja.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean czyJest = false;
+                String nazwa = JOptionPane.showInputDialog("Dodaj nowego gracza.");
+                if (nazwa != null && nazwa.length() > 0) {
+                    for (int i = 0; i < pl.gracze.size(); i++) {
+                        if (nazwa.equals(pl.gracze.get(i).getNazwa())) {
+                            czyJest = true;
+                        }
+                    }
+                    if (!czyJest) {
+                        Gracz nowyGracz = new Gracz(nazwa);
+                        pl.gracze.add(nowyGracz);
+                        pl.lista.add(nazwa);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Gracz o takiej nazwie istnieje.");
+                    }
+                }
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				pl.koniecGry("Gra zosta³a przerwana");
-			}
-		});
-		pl.zasady.addActionListener(new ActionListener() {
+            }
+        });
+        pl.usun.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, zasady, "ZASADY",JOptionPane.INFORMATION_MESSAGE);
-			}
-		});
-		pl.wyjscie.addActionListener(new ActionListener() {
-		    @Override
-		    public void actionPerformed(ActionEvent event) {
-		        System.exit(0);
-		    }
-		});
-	}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (pl.lista.getSelectedIndex() > -1) {
+                    pl.gracze.remove(pl.lista.getSelectedIndex());
+                    pl.lista.remove(pl.lista.getSelectedIndex());
+                }
+            }
+        });
+        pl.historia.addActionListener(new ActionListener() {
 
-	@Override
-	public void actionPerformed(ActionEvent e) {}
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pl.poleTekstowe.setText("");
+                for (int i = 0; i < pl.gracze.size(); i++) {
+                    pl.poleTekstowe.append("Gracz: " + pl.gracze.get(i).getNazwa() + " wygranych: "
+                            + pl.gracze.get(i).getIleWygranych() + " przegranych: "
+                            + pl.gracze.get(i).getIlePrzegranych() + "\n");
+                }
+                pl.poleTekstowe.setVisible(!pl.poleTekstowe.isVisible());
+            }
+        });
+        pl.rezygnacja.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pl.koniecGry("Gra zostaï¿½a przerwana");
+            }
+        });
+        pl.zasady.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, zasady, "ZASADY", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        pl.wyjscie.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                System.exit(0);
+            }
+        });
+        pl.zapisz.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                JFileChooser fc = new JFileChooser();
+                File file = null;
+                if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    file = fc.getSelectedFile();
+                }
+                try {
+                    PrintWriter pw = new PrintWriter(file);
+                    for (int i = 0; i < pl.gracze.size(); i++) {
+                        pw.println("Gracz: " + pl.gracze.get(i).getNazwa() + " wygranych: "
+                                + pl.gracze.get(i).getIleWygranych() + " przegranych: "
+                                + pl.gracze.get(i).getIlePrzegranych() + "\n");
+                    }
+                    pw.close();
+                } catch (FileNotFoundException fnfe) {
+                    JOptionPane.showMessageDialog(null, "Nie ma takiego pliku.");
+                }
+            }
+        });
+        pl.wczytaj.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                JFileChooser fc = new JFileChooser();
+                if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+                    try {
+                        Scanner scanner = new Scanner(file);
+                        while (scanner.hasNext()) {
+                            pl.poleTekstowe.append(scanner.nextLine() + "\n");
+                            /*Gracz nowyGracz = new Gracz(nazwa);
+                            pl.gracze.add(nowyGracz);
+                            pl.lista.add(nazwa);*/
+                        }
+                    }catch(FileNotFoundException fnfe ){
+                        JOptionPane.showMessageDialog(null, "Nie ma takiego pliku.");
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+    }
 }
