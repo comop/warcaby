@@ -36,6 +36,8 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 	private JMenuBar menu = new JMenuBar();
 	private JMenu zakoncz = new JMenu("Zakoncz");
 	public JMenuItem wyjscie = new JMenuItem("Wyjscie");
+        public JMenuItem zapisz = new JMenuItem("Zapisz historie");
+        public JMenuItem wczytaj = new JMenuItem("Wczytaj historie");
 	private String wiadomosc;
 	private Ruch inf;
 	public boolean czyWTrakcie;
@@ -323,6 +325,8 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 		pl.zasady.addActionListener(przy);
 		pl.menu.setBounds(0, 1, 1100, 18);
 		pl.zakoncz.add(pl.wyjscie);
+                pl.zakoncz.add(pl.zapisz);
+                pl.zakoncz.add(pl.wczytaj);
 		pl.menu.add(pl.zakoncz);
 		okno.add(pl);
 		okno.add(pl.nowaGra);
