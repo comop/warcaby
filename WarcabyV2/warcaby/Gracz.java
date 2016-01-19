@@ -17,10 +17,16 @@ public class Gracz {
 	public void setIleWygranych() {
 		ileWygranych++;
 	}
+	public void setIleWygranych(int ile) {
+		ileWygranych = ile;
+	}
 	public int getIlePrzegranych() {
 		return ilePrzegranych;
 	}
 	public void setIlePrzegranych() {
 		ilePrzegranych++;
+	}	
+	public void setIlePrzegranych(int ile) {
+		ilePrzegranych = ile;
 	}	
 }

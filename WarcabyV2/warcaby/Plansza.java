@@ -19,6 +19,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 public class Plansza extends JPanel implements ActionListener, MouseListener {
 
@@ -36,6 +37,8 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 	private JMenuBar menu = new JMenuBar();
 	private JMenu zakoncz = new JMenu("Zakoncz");
 	public JMenuItem wyjscie = new JMenuItem("Wyjscie");
+        public JMenuItem zapisz = new JMenuItem("Zapisz historie");
+        public JMenuItem wczytaj = new JMenuItem("Wczytaj historie");
 	private String wiadomosc;
 	private Ruch inf;
 	public boolean czyWTrakcie;
@@ -291,13 +294,13 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 	}
 
 	public static void start() {
-		
+
 		JFrame okno = new JFrame("WARCABY");
 		final Plansza pl = new Plansza();
 		Przyciski przy = new Przyciski(pl);
 		okno.setVisible(true);
 		okno.setSize(1024, 640);
-		okno.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		okno.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		okno.setResizable(false);
 		okno.setLayout(null);
 		pl.setBounds(0,20, 600, 620);
@@ -323,6 +326,8 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 		pl.zasady.addActionListener(przy);
 		pl.menu.setBounds(0, 1, 1100, 18);
 		pl.zakoncz.add(pl.wyjscie);
+                pl.zakoncz.add(pl.zapisz);
+                pl.zakoncz.add(pl.wczytaj);
 		pl.menu.add(pl.zakoncz);
 		okno.add(pl);
 		okno.add(pl.nowaGra);
@@ -336,6 +341,7 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 		okno.add(pl.rezygnacja);
 		okno.add(pl.zasady);
 		okno.add(pl.menu);
+		okno.addWindowListener(przy);
 		}
 
 	public void mouseReleased(MouseEvent evt) {}
