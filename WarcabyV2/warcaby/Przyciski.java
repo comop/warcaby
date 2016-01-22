@@ -213,6 +213,8 @@ public class Przyciski implements ActionListener,WindowListener {
                         scanner.close();
                     }catch(FileNotFoundException fnfe ){
                         JOptionPane.showMessageDialog(null, "Nie ma takiego pliku.");
+                    }catch(NumberFormatException nfe){
+                    	JOptionPane.showMessageDialog(null, "Wczytano zly plik.");
                     }
                     
                 }
