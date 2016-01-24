@@ -213,24 +213,16 @@ public class Przyciski implements ActionListener,WindowListener {
                         scanner.close();
                     }catch(FileNotFoundException fnfe ){
                         JOptionPane.showMessageDialog(null, "Nie ma takiego pliku.");
-                    }catch(NumberFormatException nfe){
+                    }catch(Exception e){
                     	JOptionPane.showMessageDialog(null, "Wczytano zly plik.");
                     }
-                    
                 }
             }
         });
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-    }
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void actionPerformed(ActionEvent e) {}
+	public void windowOpened(WindowEvent e) {}
 
 	@Override
 	public void windowClosing(WindowEvent e) {
@@ -262,33 +254,9 @@ public class Przyciski implements ActionListener,WindowListener {
     	}
 	}
 
-	@Override
-	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void windowClosed(WindowEvent e) {}
+	public void windowIconified(WindowEvent e) {}
+	public void windowDeiconified(WindowEvent e) {}
+	public void windowActivated(WindowEvent e) {}
+	public void windowDeactivated(WindowEvent e) {}
 }
