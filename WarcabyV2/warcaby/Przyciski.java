@@ -57,6 +57,7 @@ public class Przyciski implements ActionListener,WindowListener {
                 pl.lista.setEnabled(false);
                 pl.dodaj.setEnabled(false);
                 pl.usun.setEnabled(false);
+                pl.ktoryGracz = -1;
                 pl.repaint();
             }
         });
