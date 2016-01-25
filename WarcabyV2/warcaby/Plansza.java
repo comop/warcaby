@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
@@ -48,7 +49,7 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 	public boolean czyPvP = false;
 	public boolean czyPvC = false;
 	public Vector<Gracz> gracze = new Vector<Gracz>();
-	public int ktoryGracz;
+	public int ktoryGracz = -1;
 
 	public Plansza() {
 		addMouseListener(this);
@@ -187,8 +188,9 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 			dostepneRuchy = inf.mozliweRuchy(obecnyGracz);
 			if (dostepneRuchy == null) {
 				koniecGry("Bialy nie ma juz ruchow, wygrywa niebieski.");
-				
-					if (!czyPvP && gracze.get(ktoryGracz) != null)
+				      JOptionPane.showMessageDialog(null, "Wygrywa gracz niebieski");                  
+					if (!czyPvP && ktoryGracz != -1)
+                                            
 					gracze.get(ktoryGracz).setIleWygranych();
 			} else if (dostepneRuchy[0].czySkok())
 				wiadomosc = "Bialy: Musisz zbic pionek przeciwnika.";
@@ -199,8 +201,9 @@ public class Plansza extends JPanel implements ActionListener, MouseListener {
 			dostepneRuchy = inf.mozliweRuchy(obecnyGracz);
 			if (dostepneRuchy == null) {
 				koniecGry("Niebieski nie ma juz ruchow, wygrywa bialy.");
-				
-					if (!czyPvP && gracze.get(ktoryGracz) != null)
+				JOptionPane.showMessageDialog(null, "Wygrywa gracz bialy");
+					if (!czyPvP && ktoryGracz != -1)
+                                            
 						gracze.get(ktoryGracz).setIlePrzegranych();
 			} else if (dostepneRuchy[0].czySkok())
 				wiadomosc = "Niebieski: Musisz zbic pionek przeciwnika.";
