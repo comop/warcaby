@@ -1,4 +1,4 @@
-# warcaby
+# Program zaliczeniowy na projekt zespołowy
 Jako pierwszy ruch wykonuje grajacy pionami niebieskimi, po czym gracze wykonuja na zmiane kolejne ruchy.
 Celem gry jest zbicie wszystkich pionow przeciwnika albo zablokowanie wszystkich, ktore pozostajo na planszy, pozbawiajac przeciwnika mozliwosci wykonania ruchu.
 Piony moga poruszac sie o jedno pole do przodu po przekatnej (na ukos) na wolne pola.
